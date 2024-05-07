@@ -118,16 +118,33 @@ class Workout {
   }
 }
 
-const tracker = new CalorieTracker();
+class App {
+  constructor() {
+    this._tracker = new CalorieTracker();
 
-const breakfast = new Meal("breakfast", 400);
-const launch = new Meal("launch", 1050);
-tracker.addMeal(breakfast);
-tracker.addMeal(launch);
+    document
+      .getElementById("meal-form")
+      .addEventListener("submit", this._newMeal.bind(this));
+  }
 
-const run = new Workout("Run", 400);
-tracker.addWorkout(run);
+  _newMeal(e) {
+    e.preventDefault();
 
-console.log(tracker._meals);
-console.log(tracker._workouts);
-console.log(tracker._totalCalories);
+    const name = document.getElementById("meal-name");
+    const calories = document.getElementById("meal-calories");
+
+    // Validate inputs
+    if (name.value === "" || calories.value === "") {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    const meal = new Meal(name.value, +calories.value); // you can use parseIn() or + prefix to turn string into number
+
+    this._tracker.addMeal(meal);
+    name.value = "";
+    calories.value = "";
+  }
+}
+
+const app = new App();
