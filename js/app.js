@@ -124,14 +124,67 @@ class App {
 
     document
       .getElementById("meal-form")
-      .addEventListener("submit", this._newMeal.bind(this));
+      .addEventListener("submit", this._newItem.bind(this, "meal"));
+
+    document
+      .getElementById("workout-form")
+      .addEventListener("submit", this._newItem.bind(this, "workout"));
   }
 
-  _newMeal(e) {
+  // _newMeal(e) {
+  //   e.preventDefault();
+
+  //   const name = document.getElementById("meal-name");
+  //   const calories = document.getElementById("meal-calories");
+
+  //   // Validate inputs
+  //   if (name.value === "" || calories.value === "") {
+  //     alert("Please fill in all fields");
+  //     return;
+  //   }
+
+  //   const meal = new Meal(name.value, +calories.value); // you can use parseIn() or + prefix to turn string into number
+
+  //   this._tracker.addMeal(meal);
+  //   name.value = "";
+  //   calories.value = "";
+
+  //   const collapseMeal = document.getElementById("collapse-meal");
+  //   const bsCollapse = new bootstrap.Collapse(collapseMeal, {
+  //     toggle: true,
+  //   });
+  // }
+
+  // _newWorkout(e) {
+  //   e.preventDefault();
+
+  //   const name = document.getElementById("workout-name");
+  //   const calories = document.getElementById("workout-calories");
+
+  //   // Validate inputs
+  //   if (name.value === "" || calories.value === "") {
+  //     alert("Please fill in all fields");
+  //     return;
+  //   }
+
+  //   const workout = new Workout(name.value, +calories.value); // you can use parseIn() or + prefix to turn string into number
+
+  //   this._tracker.addWorkout(workout);
+
+  //   name.value = "";
+  //   calories.value = "";
+
+  //   const collapseWorkout = document.getElementById("collapse-workout");
+  //   const bsCollapse = new bootstrap.Collapse(collapseWorkout, {
+  //     toggle: true,
+  //   });
+  // }
+
+  _newItem(type, e) {
     e.preventDefault();
 
-    const name = document.getElementById("meal-name");
-    const calories = document.getElementById("meal-calories");
+    const name = document.getElementById(`${type}-name`);
+    const calories = document.getElementById(`${type}-calories`);
 
     // Validate inputs
     if (name.value === "" || calories.value === "") {
@@ -139,11 +192,23 @@ class App {
       return;
     }
 
-    const meal = new Meal(name.value, +calories.value); // you can use parseIn() or + prefix to turn string into number
+    if (type === "meal") {
+      const meal = new Meal(name.value, +calories.value); // you can use parseIn() or + prefix to turn string into number
 
-    this._tracker.addMeal(meal);
+      this._tracker.addMeal(meal);
+    } else {
+      const workout = new Workout(name.value, +calories.value); // you can use parseIn() or + prefix to turn string into number
+
+      this._tracker.addWorkout(workout);
+    }
+
     name.value = "";
     calories.value = "";
+
+    const collapseItem = document.getElementById(`collapse-${type}`);
+    const bsCollapse = new bootstrap.Collapse(collapseItem, {
+      toggle: true,
+    });
   }
 }
 
