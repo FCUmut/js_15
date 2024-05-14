@@ -49,6 +49,13 @@ class CalorieTracker {
     }
   }
 
+  reset() {
+    this._totalCalories = 0;
+    this._meals = [];
+    this._workouts = [];
+    this._render();
+  }
+
   // Private Methods //
 
   _displayCaloriesTotal() {
@@ -207,6 +214,18 @@ class App {
       .getElementById("workout-items")
       .addEventListener("click", this._removeItem.bind(this, "workout"));
 
+    document
+      .getElementById("filter-meals")
+      .addEventListener("keyup", this._filterItem.bind(this, "meal"));
+
+    document
+      .getElementById("filter-workouts")
+      .addEventListener("keyup", this._filterItem.bind(this, "workout"));
+
+    document
+      .getElementById("reset")
+      .addEventListener("click", this._reset.bind(this));
+
     // document
     //   .getElementById("meal-items")
     //   .addEventListener("click", this._removeItem.bind(this, "meal"));
@@ -307,6 +326,41 @@ class App {
         e.target.closest(".card").remove();
       }
     }
+  }
+
+  _filterItem(type, e) {
+    const text = e.target.value.toLowerCase();
+
+    document.querySelectorAll(`#${type}-items .card`).forEach((item) => {
+      const name = item.firstElementChild.firstElementChild.textContent;
+
+      // console.log(item);
+      // console.log(item.firstElementChild);
+      // console.log(item.firstElementChild.firstElementChild);
+      // console.log(item.firstElementChild.firstElementChild.textContent);
+      // console.log("name: " + name);
+      // console.log("text: " + text);
+      // console.log(name.toLowerCase().indexOf(text));
+
+      // for (let i = 0; i < name.length; i++) {
+      //   console.log(name[i] + i);
+      // }
+
+      if (name.toLowerCase().indexOf(text) !== -1) {
+        // if doesn't match result would be -1
+        item.style.display = "block";
+      } else {
+        item.style.display = "none";
+      }
+    });
+  }
+
+  _reset() {
+    this._tracker.reset();
+    document.getElementById("meal-items").innerHTML = "";
+    document.getElementById("workout-items").innerHTML = "";
+    document.getElementById("filter-meals").value = "";
+    document.getElementById("filter-workouts").value = "";
   }
 }
 
